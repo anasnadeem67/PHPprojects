@@ -1,12 +1,7 @@
 <!-- Header Section Begin -->
 <?php 
 session_start();
-
-
-
 include 'Header.php';
-
-
 
     include 'Connection.php';
     define('TITLE', 'index');
@@ -148,9 +143,9 @@ include 'Header.php';
                         <div class="label new">New</div>
                         <ul class="product__hover">
                             <li><a href="<?php echo str_replace('../', '', $row['product_img1']); ?>" class="image-popup"><span class="arrow_expand"></span></a></li>
-                            <li><a href="wishlist.php?id=<?php echo $row['product_id']; ?>"><span class="icon_heart_alt"></span></a></li>
+                            <li><a href="#" class="wishlist-btn" data-product-id="<?php echo $row['product_id']; ?>"><span class="icon_heart_alt"></span></a></li>
                             
-                            <li><a href="addCart.php?id=<?php echo $row['product_id']; ?>"><span class="icon_bag_alt"></span></a></li>
+                            <li><a href="#" class="cart-btn" data-product-id="<?php echo $row['product_id']; ?>"><span class="icon_bag_alt"></span></a></li>
                         </ul>
                     </div>
                     <div class="product__item__text">
@@ -344,6 +339,66 @@ include 'Header.php';
 <!-- Footer Section Begin -->
 <?php include 'Footer.php';?>
 <!-- Footer Section End -->
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Find all buttons with class 'wishlist-btn' or 'cart-btn'
+    var buttons = document.querySelectorAll('.wishlist-btn, .cart-btn');
+
+    // Attach event listener to each button
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            // Prevent the default link behavior
+            event.preventDefault();
+
+            // Check if user is logged in for wishlist functionality
+            var isWishlist = this.classList.contains('wishlist-btn');
+            <?php if(!isset($_SESSION["user"])): ?>
+                // Redirect to login page if not logged in
+                window.location.href = "login.php";
+            <?php else: ?>
+                // Get the product ID from data attribute
+                var productId = this.getAttribute('data-product-id');
+
+                // Perform AJAX request
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == XMLHttpRequest.DONE) {
+                        if (xhr.status == 200) {
+                            // Provide visual feedback to the user based on the button type
+                            if (isWishlist) {
+                                alert('Product added to wishlist!');
+                            } else {
+                                alert('Product added to cart!');
+                            }
+                            // Refresh the page after successful AJAX request
+                            window.location.reload();
+                        } else {
+                            // Handle error if needed
+                            console.error('Error adding product');
+                        }
+                    }
+                };
+
+                // Set the endpoint based on the button type
+                var endpoint = isWishlist ? 'wishlist.php' : 'addCart.php';
+
+                xhr.open('GET', endpoint + '?id=' + productId, true);
+                xhr.send();
+            <?php endif; ?>
+        });
+    });
+});
+
+
+
+</script>
+
+
+
+
+
+
 
 </body>
 </html>

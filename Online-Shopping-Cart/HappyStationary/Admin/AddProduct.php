@@ -25,6 +25,8 @@ if(isset($_REQUEST['ProductSubmitBtn'])){
        
         $error=array();
         $extension=array("jpeg","jpg","png","gif");
+
+        
         foreach($_FILES["product_img"]["tmp_name"] as $key=>$tmp_name) {
             $file_name=$_FILES["product_img"]["name"][$key];
             $file_tmp=$_FILES["product_img"]["tmp_name"][$key];

@@ -16,14 +16,14 @@ if(!isset($_SESSION['user'])){
         $result_check = mysqli_query($con, $sql_check);
     
         if(mysqli_num_rows($result_check) == 1) {
-            $message = "product already exit in wishlist";
-                echo "<script>alert('$message');</script>";
+            echo "already_added";
+            exit; // Exit to prevent further execution
         }else{
             $insertwishlist = "insert into wishlist (product_id, uid) values ('$pro_id', '$u_id')";
     
             if(mysqli_query($con, $insertwishlist)){
-                $message = "Add to wishlist";
-                echo "<script>alert('$message');</script>";
+                echo "added_to_wishlist";
+                exit; // Exit to prevent further execution
             }  
         }
         // Reload the page without the 'id' parameter
@@ -35,6 +35,7 @@ if(!isset($_SESSION['user'])){
     }
 }
 ?>
+
 
 <title>Wishlist</title>
 <!-- Breadcrumb Begin -->

@@ -2,7 +2,7 @@
 include 'Connection.php';
 include 'Header.php'; 
 
-echo "User ID: " . $_SESSION['uid'];
+"User ID: " . $_SESSION['uid'];
 
 
 if(isset($_POST['btnOrder'])) {
